@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+        <div class="container">
+            <div class="row">
+                <div class="popular">
+                    <h2>Телефоны и планшеты</h2>
+                    <hr>
+                </div>
+                {% for product_image in products_images_phones_and_tablets %}
+                    {% include 'product.html' %}
+                {% endfor %}
+            </div>
+            </div>
+{% endblock %}

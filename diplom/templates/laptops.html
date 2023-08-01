@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="sectionsecond">
+        <div class="container">
+            <div class="row">
+                <div class="popular">
+                    <h2>Ноутбуки</h2>
+                    <hr>
+                </div>
+                {% for product_image in products_images_laptops %}
+                    {% include 'product.html' %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

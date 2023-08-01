@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1 class="search-result-header">Результаты поиска: "{{ query }}"</h1>
+  <hr>
+
+  {% if results %}
+  <div class="container">
+    <div class="row">
+      {% for product in results %}
+        {% for product_image in product.productimage_set.all %}
+          {% if product_image.main_image %}
+            {% include 'product.html' %}
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+    </div>
+    </div>
+  {% else %}
+    <p>По вашему запросу ничего не найдено.</p>
+  {% endif %}
+{% endblock %}

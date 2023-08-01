@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container order-container">
+  <div class="row">
+    <p></p>
+<h2 class="order-header"><b>Оформление заказа</b></h2>
+<div class="col-md-8">
+<h3>Товары в корзине:</h3>
+<ul class="products-in-order">
+  {% for item in products_in_cart %}
+    <li class="product-in-order-confirm">{{ item.product.name }} - {{ item.nmb }} шт. - {{ item.total_price }} ₽</li>
+  {% endfor %}
+</ul>
+  </div>
+    <div class="col-md-4">
+ </div>
+<hr>
+<form method="post" action="{% url 'order_page' %}" class="form-inline">
+  {% csrf_token %}
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="email"></label>
+        <input type="email" name="email" required placeholder="Ваш email" class="form-control">
+      </div>
+      <p></p>
+      <div class="form-group">
+        <label for="phone"></label>
+        <input type="tel" name="phone" required placeholder="Ваш номер телефона" class="form-control">
+      </div>
+      <p></p>
+      <div class="form-group">
+        <label for="address"></label>
+        <input type="text" name="address" required placeholder="Ваш адрес" class="form-control">
+      </div>
+      <p></p>
+<div class="form-group">
+  <label for="payment_method"></label>
+  <select name="payment_method" required class="form-control w-100">
+    <option value="cash">Наличными</option>
+    <option value="card">Картой курьеру</option>
+    <option value="card">Картой в магазине</option>
+    <option value="card">Банковским переводом</option>
+  </select>
+</div>
+      <p></p>
+    </div>
+<div class="col-md-6 ">
+  <div class="form-group order-end">
+    <label for="order_comments"></label>
+    <textarea name="order_comments" class="form-control text-area-for-comments-to-order" placeholder="Ваши комментарии к заказу"></textarea>
+  </div>
+  <div class="form-group">
+    <div class="order-total-price">
+      <h5>Итоговая стоимость: <b>{{ total_price }}</b> ₽</h5>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary btn-order">Оформить заказ</button>
+    </div>
+  </div>
+</div>
+</div>
+</form>
+    </div>
+  <p></p>
+</div>
+
+{% endblock %}
+
+
+

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+        <div class="container">
+            <div class="row">
+                <div class="popular">
+                    <h2>Хиты продаж</h2>
+                    <hr>
+                </div>
+                {% for product_image in products_images %}
+                    {% include 'product.html' %}
+                {% endfor %}
+            </div>
+            </div>
+{% endblock %}

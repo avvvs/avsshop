@@ -1,0 +1,101 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+{% load static %}
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/@popperjs/core@2.10.1/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    var user_authenticated = {% if user.is_authenticated %}true{% else %}false{% endif %};
+</script>
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark" aria-label="Third navbar example">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="http://localhost:8000/">
+          <img src="{% static 'img/avsshop2.png' %}" alt="AVS Shop Logo">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarsExample03">
+        <ul class="navbar-nav me-auto mb-2 mb-sm-0">
+          <li class="nav-item navbar-buttons-style">
+            <a class="nav-link navbar-buttons-style" aria-current="page" href="http://localhost:8000/">Главная</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link navbar-buttons-style" href="{% url 'hits' %}">Хиты продаж</a>
+          </li>
+               <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle navbar-buttons-style" href="#" data-bs-toggle="dropdown" aria-expanded="false">Каталог</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'laptops'%}">Ноутбуки</a></li>
+              <li><a class="dropdown-item" href="{% url 'phones_and_tablets' %}">Телефоны и планшеты</a></li>
+              <li><a class="dropdown-item" href="{% url 'cameras' %}">Видеокамеры</a></li>
+            </ul>
+          </li>
+                      <li class="nav-item">
+            <a class="nav-link navbar-buttons-style" href="{% url 'chat' %}">Умный консультант</a>
+          </li>
+             <li class="nav-item">
+            <a class="nav-link navbar-buttons-style" href="{% url 'about_us' %}">О нас</a>
+          </li>
+        </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown basket-container">
+                <a href="" class="dropdown-toggle others-navbar cart-navbar" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
+                        Корзина
+                    <span id="basket_total_amount"></span><span id="basket_total_nmb">
+                    {% if products_total_nmb %}
+                    {% else %}
+                    {% endif %}
+                    </span>
+                </a>
+                <ul class="dropdown-menu basket-items">
+                    <ul class="">
+                        {% for product_in_basket in products_in_cart %}
+                            <li>{{ product_in_basket.product.name }} {{ product_in_basket.nmb }} шт.
+                                по {{ product_in_basket.reserve_price }} ₽
+                                <div class="clear-link-wrapper">
+                                    {% csrf_token %}
+                                <a class="delete-item clear-cart-button" href="" data-product_id="{{ product_in_basket.product.id }}">Очистить</a>
+                                </div>
+                            </li>
+                        {% endfor %}
+                            {% if products_in_cart %}
+                        <p></p>
+        {% if user.is_authenticated %}
+    <a class="order-link create-order-button" href="{% url 'order_page' %}">Оформить заказ ✔</a>
+                        {% else %}
+    <p>Для оформления заказа необходимо авторизоваться</a>.</p>
+{% endif %}
+    {% endif %}
+                    </ul>
+                </ul>
+            </li>
+          </ul>
+          <form class="d-flex" method="GET" action="{% url 'search' %}">
+            <span id="voice-trigger" class="btn btn-secondary" type="button">
+                <i class="fas fa-microphone"></i>
+            </span>
+            {% include 'voice_search.html' %}
+          </form>
+          {% if user.is_authenticated %}
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link others-navbar" href="{% url 'logout' %}">Выйти</a>
+                </li>
+            </ul>
+          {% else %}
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link others-navbar" href="{% url 'login' %}">Войти</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link others-navbar" href="{% url 'register' %}">Регистрация</a>
+                </li>
+            </ul>
+          {% endif %}
+      </div>
+    </div>
+  </nav>

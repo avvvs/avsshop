@@ -1,0 +1,60 @@
+<form id="search" role="search" method="get" class="search-form" action="{% url 'search' %}">
+    <label>
+
+        <input id="search-field" type="search" class="search-field search-navbar-style" placeholder="Поиск" value="" name="q" />
+    </label>
+    <input type="submit" class="search-button" value="Найти" />
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+    window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (window.SpeechRecognition) {
+        /* setup vars for our trigger, form, text input, and result elements */
+        var $voiceTrigger = $("#voice-trigger");
+        var $searchForm = $("#search");
+        var $searchInput = $("#search-field");
+
+        var recognition = new SpeechRecognition();
+        recognition.interimResults = true;
+        recognition.lang = 'ru-RU';
+
+        recognition.addEventListener('result', function(e) {
+            var speechOutput = _parseTranscript(e);
+            $searchInput.val(speechOutput);
+
+            if (e.results[0].isFinal) {
+                $searchForm.submit();
+            }
+        });
+
+        recognition.onerror = function(event) {
+            console.log(event.error);
+
+            if(event.error == 'no-speech'){
+                $voiceTrigger.removeClass('active');
+                $searchInput.attr("placeholder", "Поиск...");
+            }
+        };
+
+        $voiceTrigger.on('click touch', function(e) {
+            e.preventDefault();
+            /* Update input and icon CSS to show that the browser is listening */
+            $searchInput.attr("placeholder", "Говорите...");
+            $voiceTrigger.addClass('active');
+            /* Start voice recognition */
+            recognition.start();
+        });
+    } else {
+        $voiceTrigger.remove();
+    }
+
+    function _parseTranscript(e) {
+        return Array.from(e.results)
+            .map(function (result) { return result[0] })
+            .map(function (result) { return result.transcript })
+            .join('');
+    }
+</script>

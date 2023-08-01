@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="">
+                <div id="carouselExampleControls" class="carousel slide slider-border" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for image_item in product.productimage_set.all %}
+                        <div class="carousel-item{% if forloop.first %} active{% endif %}">
+                            <img src="{{ image_item.image.url }}" class="d-block w-100" alt="...">
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 info-in-order">
+            <hr>
+            <h1 class="text-center">
+                {{ product.name }}
+            </h1>
+            <div class="price">
+                <p>
+                    {{ product.price }} ₽
+                </p>
+            </div>
+            <hr>
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="aboutproduct-tab" data-bs-toggle="tab" href="#aboutproduct" role="tab" aria-controls="aboutproduct" aria-selected="true">О товаре</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Характеристики</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Отзывы</a>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="aboutproduct" role="tabpanel" aria-labelledby="aboutproduct-tab">
+                    <div class="product-info-in-bar product-description-on-page">
+                        {% if product.description|length > 650 %}
+                        <p>
+                            <span id="description-short">{{ product.description|slice:":650" }}</span>
+                            <span id="description-full" style="display: none;">{{ product.description }}</span>
+                            <a id="read-more-link" class="read-more-button" href="#">...Читать полностью</a>
+                            <a id="hide-description-link" class="read-more-button" href="#" style="display: none;">Скрыть</a>
+                        </p>
+                        {% else %}
+                        <p>{{ product.description }}</p>
+                        {% endif %}
+                        <form id="form_buying_product" class="form-inline custom-form" action="/cart_adding/">
+    {% csrf_token %}
+    <div class="form-group">
+        <input type="number" class="form-control input-for-buy" name="number" id="number" placeholder="Введите количество">
+    </div>
+    <div class="form-group">
+        <button type="submit" id="submit_btn" class="btn button-color" data-product_id="{{ product.id }}" data-name="{{ product.name }}" data-price="{{ product.price }}">
+            Добавить в корзину
+        </button>
+    </div>
+</form>
+                    </div>
+                </div>
+                <div class="tab-pane fade specifications-info" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="specifications-info">
+                        {% if product.specifications|length > 289 %}
+                        <p>
+                            <span id="specifications-short">{{ product.specifications|linebreaksbr|slice:":289" }}</span>
+                            <span id="specifications-full" style="display: none;">{{ product.specifications|linebreaksbr }}</span>
+                            <a id="read-more-link-spec" class="read-more-button" href="#">...Читать полностью</a>
+                            <a id="hide-specifications-link" class="read-more-button" href="#" style="display: none;">Скрыть</a>
+                        </p>
+                        {% else %}
+                        <p>{{ product.specifications }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                    <div id="reviews-container">
+                        {% if user.is_authenticated %}
+                        <form id="review-form"  method="post" action="{% url 'product_page' product.id %}" >
+                            {% csrf_token %}
+
+                            {{ form.as_p }}
+
+                            <button class="review-button" type="submit">Оставить отзыв</button>
+                            <hr>
+                        </form>
+                        {% for review in reviews %}
+                        <div class=" container review review-container">
+                            <div class="row">
+                            <div class="col-lg-3 in-review-container">
+                            <p>Пользователь: {{ review.user }}</p>
+                                    <p><p></p>
+                                <span class="review-rating">{{ review.rating }}</span></p>
+                                <p>{{ review.date_created|date:"d E Y, H:i" }}</p>
+                                </div>
+                            <div class="col-lg-9">
+                            <p>{{ review.text }}</p>
+                            </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p class="review-message">Отзывов ещё нет, будьте первым, кто его оставит!</p>
+                        {% endfor %}
+                         {% else %}
+        <p>Для оставления отзыва необходимо <a href="#">авторизоваться</a>.</p>
+                        {% for review in reviews %}
+                        <div class=" container review review-container">
+                            <div class="row">
+                            <div class="col-lg-3 in-review-container">
+                            <p>Пользователь: {{ review.user }}</p>
+                                    <p><p></p>
+                                <span class="review-rating">{{ review.rating }}</span></p>
+                                <p>{{ review.date_created|date:"d E Y, H:i" }}</p>
+                                </div>
+                            <div class="col-lg-9">
+                            <p>{{ review.text }}</p>
+                            </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p class="review-message">Отзывов ещё нет, будьте первым, кто его оставит!</p>
+                        {% endfor %}
+        {% endif %}
+    </div>
+                    </div>
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+                    <script>
+$(document).ready(function() {
+
+    function replaceRatingWithStars() {
+        $('.review-rating').each(function() {
+            var rating = $(this).text();
+            var stars = '';
+
+            for (var i = 0; i < rating; i++) {
+                stars += '★';
+            }
+
+            $(this).text(stars);
+        });
+    }
+
+    replaceRatingWithStars();
+
+    $('#review-form').on('submit', function(event) {
+        event.preventDefault();
+        var form = $(this);
+        var formData = form.serialize();
+
+$.ajax({
+    url: form.attr('action'),
+    type: form.attr('method'),
+    data: formData,
+    success: function(response) {
+        $('#reviews-container').load(window.location.href + ' #reviews-container', function() {
+            replaceRatingWithStars();
+        });
+        form.trigger('reset');
+    },
+            error: function(xhr) {
+
+            }
+        });
+    });
+
+    $('#read-more-link').on('click', function(event) {
+        event.preventDefault();
+        $('#description-short').hide();
+        $('#description-full').show();
+        $(this).hide();
+        $('#hide-description-link').show();
+    });
+
+    $('#hide-description-link').on('click', function(event) {
+        event.preventDefault();
+        $('#description-full').hide();
+        $('#description-short').show();
+        $(this).hide();
+        $('#read-more-link').show();
+    });
+
+    $('#read-more-link-spec').on('click', function(event) {
+        event.preventDefault();
+        $('#specifications-short').hide();
+        $('#specifications-full').show();
+        $(this).hide();
+        $('#hide-specifications-link').show();
+    });
+
+    $('#hide-specifications-link').on('click', function(event) {
+        event.preventDefault();
+        $('#specifications-full').hide();
+        $('#specifications-short').show();
+        $(this).hide();
+        $('#read-more-link-spec').show();
+    });
+});
+</script>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

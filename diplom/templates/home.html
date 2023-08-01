@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="section-top">
+    <img src="{% static 'img/headerprototype.jpg' %}" class="img-fluid shadow-element-first">
+</div>
+<div class="container">
+    <div class="row">
+        <div class="popular">
+            <hr>
+            <h2><b>Хиты продаж</b></h2>
+            <hr>
+        </div>
+        <div id="carouselHits" class="carousel slide main-slider" data-bs-pause="hover">
+            <div class="carousel-inner">
+                {% for product_image in products_images %}
+                {% if forloop.counter0|divisibleby:4 %}
+                <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %}">
+                    <div class="row justify-content-left">
+                        {% endif %}
+                        {% include 'product.html' %}
+                        {% if forloop.counter|divisibleby:4 or forloop.last %}
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselHits" data-bs-slide="prev" data-bs-interval="false">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselHits" data-bs-slide="next" data-bs-interval="false">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<div class="section-catalog">
+    <img src="{% static 'img/headersecond.jpg' %}" class="img-fluid shadow-element">
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="popular">
+            <hr>
+            <h2><b>Телефоны и планшеты</b></h2>
+            <hr>
+        </div>
+        <div id="carouselPhonesAndTablets" class="carousel slide main-slider" data-bs-pause="hover">
+            <div class="carousel-inner">
+                {% for product_image in products_images_phones_and_tablets %}
+                {% if forloop.counter0|divisibleby:4 %}
+                <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %}">
+                    <div class="row justify-content-left">
+                        {% endif %}
+                        {% include 'product.html' %}
+                        {% if forloop.counter|divisibleby:4 or forloop.last %}
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselLaptops"
+                    data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselLaptops"
+                    data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="popular">
+            <hr>
+            <h2><b>Ноутбуки</b></h2>
+            <hr>
+        </div>
+        <div id="carouselLaptops" class="carousel slide main-slider" data-bs-pause="hover">
+            <div class="carousel-inner">
+                {% for product_image in products_images_laptops %}
+                {% if forloop.counter0|divisibleby:4 %}
+                <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %}">
+                    <div class="row justify-content-left">
+                        {% endif %}
+                        {% include 'product.html' %}
+                        {% if forloop.counter|divisibleby:4 or forloop.last %}
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselLaptops" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselLaptops" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="popular">
+            <hr>
+            <h2><b>Камеры</b></h2>
+            <hr>
+        </div>
+        <div id="carouselCameras" class="carousel slide main-slider" data-bs-pause="hover">
+            <div class="carousel-inner">
+                {% for product_image in products_images_cameras %}
+                {% if forloop.counter0|divisibleby:4 %}
+                <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %}">
+                    <div class="row justify-content-left">
+                        {% endif %}
+                        {% include 'product.html' %}
+                        {% if forloop.counter|divisibleby:4 or forloop.last %}
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselLaptops" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselLaptops" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
